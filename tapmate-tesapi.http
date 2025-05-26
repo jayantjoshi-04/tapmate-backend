@@ -1,0 +1,19 @@
+### Signup (POST)
+POST http://localhost:5000/api/signup
+Content-Type: application/json
+
+{
+  "collegeId": "20231BCI0070",
+  "phone": "9876543210",
+  "name": "Tarun",
+  "password": "tapmate@123"
+}
+
+### Login (POST)
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+  "collegeId": "20231BCI0070",
+  "password": "tapmate@123"
+}
