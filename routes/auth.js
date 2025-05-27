@@ -6,31 +6,27 @@ const jwt = require('jsonwebtoken');
 
 // Signup Route
 router.post('/signup', async (req, res) => {
-  const { collegeId, phone, name, password } = req.body;
-
   try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ collegeId });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    const { name, collegeId, phone, password } = req.body;
+
+    if (!name || !collegeId || !phone || !password) {
+      return res.status(400).json({ message: 'Please fill all fields' });
     }
 
-    // Hash the password
+    const existingUser = await User.findOne({ collegeId });
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
-    const newUser = new User({
-      collegeId,
-      phone,
-      name,
-      password: hashedPassword
-    });
-
+    const newUser = new User({ name, collegeId, phone, password: hashedPassword });
     await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
 
+    res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Something went wrong', error });
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
