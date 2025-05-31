@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="H_C.css">
+    <title>Tapmate-Hatti-coffee</title>
+</head>
+<body>
+    <div id="notification" class="notification" style="display:none;"></div>
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">TAPMATE</a>
+            <img src="stock/icons/Hatti.png" class="hatticoffee"></img>
+        </div>
+    </nav>
+
+    <div>
+        <button class="newcart" onclick="clearCart()">New cart</button>
+    <div class="searchbar">Search</div>
+    </div>
+<div class="menu">
+    <div class="fc" data-name="FCoffee" data-price="20">
+        Filter coffee
+        <img src="stock/icons/filter coffee.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+
+       <div class="mc" data-name="masalachai" data-price="20">
+        Masala Chai
+        <img src="stock/icons/masalachai.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+
+       <div class="mg" data-name="maggi" data-price="40">
+        Maggi
+        <img src="stock/icons/maggi.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+
+       <div class="sm" data-name="samosa" data-price="20">
+        Samosa
+        <img src="stock/icons/samosa.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+
+    <div class="fr" data-name="fries" data-price="50">
+        Fries
+        <img src="stock/icons/fries.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+    
+       <div class="bg" data-name="burger" data-price="40">
+        Burger
+        <img src="stock/icons/burger.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+
+           <div class="sw" data-name="Sandwich" data-price="40">
+        Sandwich
+        <img src="stock/icons/sandwich.png"></img>
+    <button onclick="addToCart(this)">Buy Now</button>
+    </div>
+</div>
+<div class="checkout"><a href="checkout.html">Checkout</a></div>
+<footer>
+    <a href="#" class="footer-logo">TAPMATE</a>
+    <img src="stock/illustrations/footercard.png" alt="idcard" class="footer-card">
+</footer>
+
+
+
+
+
+<script>
+
+function showNotification(message, color = '#00c853')
+{
+  const notif = document.getElementById('notification');
+  notif.textContent = message;
+  notif.style.backgroundColor = color;
+  notif.style.display = 'block';
+
+  setTimeout(() => {
+    notif.style.display = 'none';
+  }, 3000);
+}
+  function clearCart() {
+  localStorage.removeItem('cart');
+  showNotification("🗑️ Cart cleared!");
+  showCart(); // ✅ 
+  }
+
+  function addToCart(button) {
+    const item = button.parentElement;
+    const name = item.getAttribute('data-name');
+    const price = item.getAttribute('data-price');
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({ name, price });
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    showNotification(`${name} added to cart!`);
+
+  }
+</script>
+
+</body>
+</html>

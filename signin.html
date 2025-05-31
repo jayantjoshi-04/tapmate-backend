@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="signin.css">
+    <title>Tapmate-signin</title>
+</head>
+<body>
+ <div class="logo">Tapmate</div>
+ <img src="stock/icons/coffee.png" class="coffee-bean1">
+ <img src="stock/icons/coffee.png" class="coffee-bean2">
+<form  class="frame" id="signinform">
+    <h1 class="signup">Sign in</h1>
+    <input id="collegeId" class="Idnumber" placeholder="Id number"></input>
+    <input id="password" class="Password" type="password" placeholder="Password"></input>
+    <button type="submit" class="submit">Submit</button>
+    <a href="signup.html" class="btn-signup">Signup</a>
+    <a href="forgotpass.html" class="forgotpass">Forgot</a>
+</form>
+<img src="stock/illustrations/idcard.png" class="idcard">
+
+
+
+  <script>
+    
+    document.getElementById('signinform').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const collegeId = document.getElementById('collegeId').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('https://tapmate-backend.onrender.com/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ collegeId, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.removeItem('cart');
+          alert('Login successful!');
+          window.location.href = 'home.html'; // Redirect after successful login
+        } else {
+          console.log('Full response:', data);
+          alert('Login failed: ' + JSON.stringify(data));
+
+        }
+      } catch (error) {
+        alert('Error connecting to server: ' + error.message);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

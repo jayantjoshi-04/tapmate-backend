@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="checkout.css">
+  <title>Tapmate – Checkout</title>
+</head>
+<body onload="showCart()">
+  <div id="notification" class="notification" style="display: none;"></div>
+      <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">TAPMATE</a>
+            <ul class="nav-links">
+            
+            </ul>
+        </div>
+    </nav>
+  <h2>Your Bill</h2>
+  <div class="line"></div>
+  <div id="cart-items"></div>
+  <div class="linee"></div>
+  <div id="total"></div>
+  <button onclick="clearCart()">clear cart</button>
+  <button onclick="writeToNFC()">Tap to Recieve your Goodies</button>
+<footer>
+    <a href="#" class="footer-logo">TAPMATE</a>
+    <img src="stock/illustrations/footercard.png" alt="idcard" class="footer-card">
+</footer>
+  <script>
+
+
+
+  function showNotification(message) {
+  const note = document.getElementById('notification');
+  note.textContent = message;
+  note.style.display = 'block';
+  setTimeout(() => {
+    note.style.display = 'none';
+  }, 3000);
+}
+  function clearCart() {
+  localStorage.removeItem('cart');
+  showNotification("🗑️ Cart cleared!");
+  showCart(); // ✅ 
+  }
+
+    function showCart() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = 0;
+      let html = '';
+
+      cart.forEach(item => {
+        html += `<p>${item.name} - ₹${item.price}</p>`;
+        total += parseInt(item.price);
+      });
+
+      document.getElementById('cart-items').innerHTML = html;
+      document.getElementById('total').innerHTML = `Total: ₹${total}`;
+    }
+
+async function writeToNFC() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // 🛑 Check for empty cart first
+    if (cart.length === 0) {
+        showNotification("🛒 Your cart is empty. Please add items before tapping.");
+        return;
+    }
+
+    const bill = cart.map(item => `${item.name}: ₹${item.price}`).join(', ');
+    const total = cart.reduce((sum, item) => sum + parseInt(item.price), 0);
+    const message = `Order: [${bill}] | Total: ₹${total}`;
+
+    if ("NDEFWriter" in window) {
+        try {
+            const writer = new NDEFWriter();
+            await writer.write(message);
+            showNotification("✅ Bill written to NFC tag!\n\n" + message);
+        } catch (error) {
+            showNotification("Written to NFC " + error.message);
+        }
+    } else {
+        showNotification("❌ NFC not supported on this device/browser.");
+    }
+}
+
+
+  </script>
+</body>
+</html>
